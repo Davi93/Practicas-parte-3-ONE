@@ -1,0 +1,130 @@
+<canvas width="600" height="400"></canvas>
+
+<script>
+    var pantalla = document.querySelector('canvas');
+    var pincel = pantalla.getContext('2d');
+
+    pincel.fillStyle = 'grey';
+    pincel.fillRect(0, 0, 600, 400);
+
+    var puedoDibujar = false;
+
+    var xCiRojo = 20;
+    var xCiVerde = 60;
+    var xCiAzul = 100;
+    var yCirculo = 20;
+    var radio = 20;
+    var colorActual = "black";
+
+    function dibujarCirculo(x,y,colorActual ) {
+
+        if(puedoDibujar) {
+
+            pincel.fillStyle = colorActual;
+            pincel.beginPath();
+            pincel.arc(x, y, 5, 0, 2 * 3.14);
+            pincel.fill();
+
+        }
+    }
+
+ 
+    function drawnCircle(x, y, radio,color) {
+
+        pincel.fillStyle = color;
+        pincel.beginPath();
+        pincel.arc(x, y, radio, 0, 2 * 3.14);
+        pincel.fill();
+
+    }
+
+   
+    function paletaColor() {
+
+        drawnCircle(xCiRojo,yCirculo,radio,"red");
+        drawnCircle(xCiVerde,yCirculo,radio,"green");
+        drawnCircle(xCiAzul,yCirculo,radio,"blue");
+
+    }
+
+    function habilitarDibujar() {
+
+        puedoDibujar = true;
+
+    }
+
+    function deshabilitarDibujar() {
+
+        puedoDibujar = false;
+
+    }
+
+    
+    function selectArea(xCoordenada,yCoordenada){
+
+        if ((xCoordenada >= 0 && xCoordenada < (3*radio+67)) && 
+            (yCoordenada >= 0 && yCoordenada < (radio+27))) {
+
+            return false;
+
+        } else{
+
+            return true;
+
+        }
+
+    }    
+
+    function capturarMovimientoDelMouse(evento){
+
+        var x = evento.pageX - pantalla.offsetLeft;
+        var y = evento.pageY - pantalla.offsetTop;
+
+        if (selectArea(x,y)){
+
+                dibujarCirculo(x,y,colorActual);
+
+        }
+
+    }
+
+    function seleccionarColor(evento) {
+
+        var x = evento.pageX - pantalla.offsetLeft;
+        var y = evento.pageY - pantalla.offsetTop;
+
+       
+        if (y > yCirculo && y < (yCirculo + radio)) {
+
+            if(x > xCiRojo && x < (xCiRojo + radio)) {
+
+                colorActual = "red";
+                console.log(colorActual);
+
+            } else if (x > xCiVerde && x < (xCiVerde + radio)) {
+
+                colorActual = "green";
+
+            } else if(x > xCiAzul && x < (xCiAzul + radio)) {
+
+                colorActual = "blue";
+
+            }            
+
+
+        }
+
+
+    }
+
+    pantalla.onmousemove = capturarMovimientoDelMouse;
+
+    pantalla.onmousedown = habilitarDibujar;
+
+    pantalla.onmouseup = deshabilitarDibujar;
+
+    paletaColor();
+
+    pantalla.onclick = seleccionarColor;
+
+</script>
